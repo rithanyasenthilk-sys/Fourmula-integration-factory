@@ -91,4 +91,4 @@ Replay mode prints `replay · saved output from an earlier live run` so it is al
 
 ## AI tools used
 
-Google Gemini (the agent's model). Claude (Anthropic) helped write the notebook code, build the mock systems, write the replay backup outputs and the manual baseline code, turn our slide plan into the deck, run the notebook replay and edit the demo video. See `Fourmula_AI_Tools_Declaration.docx`.
+Google Gemini (the agent's model). Claude (Anthropic) helped write the notebook code, build the mock systems, write the replay backup outputs and the manual baseline code, turn our slide plan into the deck and edit the demo video. See `Fourmula_AI_Tools_Declaration.docx`.
