@@ -1,0 +1,47 @@
+[
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "lab_csv: row 102: rejected - patient_ref missing or invalid"
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "lab_csv: row 556: rejected - result_value missing or invalid"
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "lab_csv: row 1703: rejected - patient_ref missing or invalid"
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "lab_csv: row 2223: rejected - result_value missing or invalid"
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "lab_csv: row 3304: rejected - patient_ref missing or invalid"
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "lab_csv: row 4445: rejected - result_value missing or invalid"
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "Encounter ENC-400878 refers to Patient/00000000-dead-beef-0000-000000000000, which is not in the registration system. Held for review."
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "Observation LAB-889 refers to Patient/00000000-dead-beef-0000-000000000001, which is not in the registration system. Held for review."
+  },
+  {
+    "time": "2026-11-14T21:57:22",
+    "level": "WARNING",
+    "message": "Observation LAB-4000 refers to Patient/00000000-dead-beef-0000-000000000001, which is not in the registration system. Held for review."
+  }
+]

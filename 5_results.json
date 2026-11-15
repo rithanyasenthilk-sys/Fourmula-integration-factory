@@ -1,0 +1,43 @@
+{
+  "run": "20261114-200606",
+  "mode": "live",
+  "model": "gemini-3.6-flash",
+  "data": "team",
+  "stages": {
+    "discover": {
+      "finished_at": 1794692295.4281754,
+      "approved": true,
+      "agent_seconds": 21.3,
+      "reviewer": "Shravanthika Rajkumar",
+      "review_seconds": 246.3,
+      "notes": "Checked: date formats correct (DD/MM/YYYY, YYYYMMDD HHMM, DD/MM/YYYY HH:mm); patient_id, PT_REF and patient_ref correctly linked; names, DOB, address and postcode marked personal. Correction: WEL and OUT do exist in LKP_VISIT_TYPE, as the agent only saw 5 sample rows."
+    },
+    "design": {
+      "finished_at": 1794693012.9869602,
+      "approved": true,
+      "agent_seconds": 35.2,
+      "mappings": 20,
+      "reviewer": "Shravanthika",
+      "review_seconds": 107.3,
+      "notes": "Checked all mappings. First design missed Encounter.status and Observation.id/status, and took the department from VISIT_DESC instead of the lookup table. Sent feedback; the revised design is correct."
+    },
+    "generate": {
+      "finished_at": 1794693210.3770003,
+      "approved": true,
+      "agent_seconds": 76.7,
+      "all_passed": true,
+      "reviewer": "Shravanthika",
+      "review_seconds": 223.7,
+      "notes": "All 3 adapters passed 15/15. Checked: lab and patient code read dates day-first; logs contain row numbers and field names only; hospital code uses the lookup table for visit type and sets status from VISIT_END, as corrected at Design. Minor: LOINC format not validated; first name optional."
+    },
+    "operate": {
+      "finished_at": 1794693442.7939403,
+      "approved": false,
+      "records": 6016,
+      "alerts": 9,
+      "log_leaks": 0
+    }
+  },
+  "mapping_score": "16/16",
+  "manual_notes": ""
+}

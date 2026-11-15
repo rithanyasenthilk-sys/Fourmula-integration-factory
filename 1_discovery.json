@@ -1,0 +1,277 @@
+{
+  "systems": [
+    {
+      "system_id": "patient_api",
+      "summary": "Patient registration system storing master patient demographic data.",
+      "access_method": "HTTP REST API using GET /patients (or GET /patients/{patient_id}) returning JSON responses.",
+      "entities": [
+        {
+          "entity": "GET /patients",
+          "fields": [
+            {
+              "field": "patient_id",
+              "type": "string",
+              "meaning": "Unique hospital-wide patient identifier UUID",
+              "format": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+              "personal_data": true,
+              "patient_identifier": true
+            },
+            {
+              "field": "first_name",
+              "type": "string",
+              "meaning": "Patient given name",
+              "format": "Text (masked as Xxxxxxxx)",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "last_name",
+              "type": "string",
+              "meaning": "Patient family name",
+              "format": "Text (masked as Xxxxxx)",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "date_of_birth",
+              "type": "string",
+              "meaning": "Patient birth date",
+              "format": "DD/MM/YYYY",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "sex",
+              "type": "string",
+              "meaning": "Biological sex code",
+              "format": "code: F/M",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "marital_status",
+              "type": "string",
+              "meaning": "Marital status code",
+              "format": "code: M/null",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "address",
+              "type": "string",
+              "meaning": "Street address of residence",
+              "format": "Text (masked)",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "city",
+              "type": "string",
+              "meaning": "City of residence",
+              "format": "Text",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "county",
+              "type": "string",
+              "meaning": "County of residence",
+              "format": "Text",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "postcode",
+              "type": "string",
+              "meaning": "Postal code of residence",
+              "format": "99999",
+              "personal_data": true,
+              "patient_identifier": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "system_id": "hospital_db",
+      "summary": "Legacy relational database storing clinical encounter history and visit type lookup metadata.",
+      "access_method": "SQL queries against relational database tables.",
+      "entities": [
+        {
+          "entity": "TBL_VISIT",
+          "fields": [
+            {
+              "field": "VISIT_NO",
+              "type": "integer",
+              "meaning": "Unique visit record primary key",
+              "format": "Numeric integer (e.g. 400001)",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "PT_REF",
+              "type": "string",
+              "meaning": "Foreign key reference to patient identifier UUID",
+              "format": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+              "personal_data": true,
+              "patient_identifier": true
+            },
+            {
+              "field": "VISIT_START",
+              "type": "string",
+              "meaning": "Visit start timestamp",
+              "format": "YYYYMMDD HHMM",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "VISIT_END",
+              "type": "string",
+              "meaning": "Visit end timestamp",
+              "format": "YYYYMMDD HHMM",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "VISIT_TYPE",
+              "type": "string",
+              "meaning": "Visit type code referencing LKP_VISIT_TYPE",
+              "format": "code: WEL/AMB/OUT/EMR/HOM/HSP/INP",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "SCT_CD",
+              "type": "string",
+              "meaning": "SNOMED CT clinical procedure/concept code",
+              "format": "Numeric string (e.g. 162673000)",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "VISIT_DESC",
+              "type": "string",
+              "meaning": "Text description of the visit procedure",
+              "format": "Text",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "RSN_DESC",
+              "type": "string",
+              "meaning": "Reason or diagnosis description for the visit",
+              "format": "Text or null",
+              "personal_data": true,
+              "patient_identifier": false
+            }
+          ]
+        },
+        {
+          "entity": "LKP_VISIT_TYPE",
+          "fields": [
+            {
+              "field": "TYPE_CD",
+              "type": "string",
+              "meaning": "Visit type code primary key",
+              "format": "code: AMB/EMR/HOM/HSP/INP",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "TYPE_DESC",
+              "type": "string",
+              "meaning": "Descriptive label for visit type code",
+              "format": "Text",
+              "personal_data": false,
+              "patient_identifier": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "system_id": "lab_csv",
+      "summary": "Laboratory system export containing numeric laboratory test measurements.",
+      "access_method": "Nightly batch CSV file download and parsing.",
+      "entities": [
+        {
+          "entity": "lab_csv",
+          "fields": [
+            {
+              "field": "patient_ref",
+              "type": "string",
+              "meaning": "Reference to patient identifier UUID",
+              "format": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+              "personal_data": true,
+              "patient_identifier": true
+            },
+            {
+              "field": "collected_at",
+              "type": "string",
+              "meaning": "Timestamp of lab specimen collection",
+              "format": "DD/MM/YYYY HH:mm",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "loinc_code",
+              "type": "string",
+              "meaning": "Standard LOINC code for the lab test",
+              "format": "LOINC code (e.g. 32207-3)",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "test_description",
+              "type": "string",
+              "meaning": "Text description of the laboratory test",
+              "format": "Text",
+              "personal_data": false,
+              "patient_identifier": false
+            },
+            {
+              "field": "result_value",
+              "type": "string",
+              "meaning": "Numeric lab test result value represented as string",
+              "format": "Decimal number string (e.g. 10.5)",
+              "personal_data": true,
+              "patient_identifier": false
+            },
+            {
+              "field": "result_unit",
+              "type": "string",
+              "meaning": "Unit of measurement for lab result",
+              "format": "Text (e.g. fL, %, g/dL, 10*3/uL)",
+              "personal_data": false,
+              "patient_identifier": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "hospital_db.TBL_VISIT.PT_REF",
+      "to": "patient_api.GET /patients.patient_id",
+      "meaning": "Links hospital database visit records to patient registration demographic records via patient UUID."
+    },
+    {
+      "from": "lab_csv.lab_csv.patient_ref",
+      "to": "patient_api.GET /patients.patient_id",
+      "meaning": "Links laboratory test records to patient registration demographic records via patient UUID."
+    },
+    {
+      "from": "hospital_db.TBL_VISIT.VISIT_TYPE",
+      "to": "hospital_db.LKP_VISIT_TYPE.TYPE_CD",
+      "meaning": "Decodes visit type codes in visit records using the visit type lookup table."
+    }
+  ],
+  "data_quality_risks": [
+    "Inconsistent date and timestamp formats across systems: patient_api uses 'DD/MM/YYYY', lab_csv uses 'DD/MM/YYYY HH:mm', and hospital_db uses 'YYYYMMDD HHMM'.",
+    "Unmapped lookup values: TBL_VISIT contains visit type codes like 'WEL' and 'OUT' that are missing from the sample rows of LKP_VISIT_TYPE.",
+    "Data type representation: lab_csv stores numeric result values (result_value) as strings, requiring parsing and validation before numerical processing.",
+    "Nullable fields: marital_status in patient_api and RSN_DESC in hospital_db contain null values that must be handled by downstream logic.",
+    "Lack of explicit encounter linkage: lab_csv results reference patient_ref and timestamp but lack a direct visit_id reference to correlate lab tests directly to TBL_VISIT records."
+  ]
+}

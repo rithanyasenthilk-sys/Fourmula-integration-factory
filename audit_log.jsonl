@@ -1,0 +1,63 @@
+{"time": "2026-11-14T20:07:15", "run": "20261114-200606", "event": "sources_loaded", "data_source": "team"}
+{"time": "2026-11-14T20:15:59", "run": "20261114-200606", "event": "discovery_tools_run", "systems": ["patient_api", "hospital_db", "lab_csv"]}
+{"time": "2026-11-14T21:07:18", "run": "20261114-200606", "event": "discovery_tools_run", "systems": ["patient_api", "hospital_db", "lab_csv"]}
+{"time": "2026-11-14T21:07:56", "run": "20261114-200606", "event": "agent_call", "task": "discover", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 37.8, "prompt_characters": 8196}
+{"time": "2026-11-14T21:07:56", "run": "20261114-200606", "event": "stage_finished", "stage": "discover", "agent_seconds": 37.8}
+{"time": "2026-11-14T21:08:30", "run": "20261114-200606", "event": "human_approval", "stage": "discover", "reviewer": "Shravanthika Rajkumar", "review_seconds": 33.6, "notes": ""}
+{"time": "2026-11-14T21:11:15", "run": "20261114-200606", "event": "agent_call", "task": "design", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 69.0, "prompt_characters": 13750}
+{"time": "2026-11-14T21:11:15", "run": "20261114-200606", "event": "stage_finished", "stage": "design", "agent_seconds": 69.0, "mappings": 20}
+{"time": "2026-11-14T21:12:31", "run": "20261114-200606", "event": "human_approval", "stage": "design", "reviewer": "Shravanthika", "review_seconds": 75.9, "notes": ""}
+{"time": "2026-11-14T21:12:56", "run": "20261114-200606", "event": "agent_call", "task": "generate_patient_api_attempt1", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 16.0, "prompt_characters": 9229}
+{"time": "2026-11-14T21:12:56", "run": "20261114-200606", "event": "generation_attempt", "system": "patient_api", "attempt": 1, "checks_passed": 15, "checks_total": 15}
+{"time": "2026-11-14T21:13:33", "run": "20261114-200606", "event": "agent_call", "task": "generate_hospital_db_attempt1", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 37.2, "prompt_characters": 10565}
+{"time": "2026-11-14T21:13:34", "run": "20261114-200606", "event": "generation_attempt", "system": "hospital_db", "attempt": 1, "checks_passed": 15, "checks_total": 15}
+{"time": "2026-11-14T21:14:31", "run": "20261114-200606", "event": "agent_call", "task": "generate_lab_csv_attempt1", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 57.1, "prompt_characters": 9784}
+{"time": "2026-11-14T21:14:32", "run": "20261114-200606", "event": "generation_attempt", "system": "lab_csv", "attempt": 1, "checks_passed": 15, "checks_total": 15}
+{"time": "2026-11-14T21:14:32", "run": "20261114-200606", "event": "stage_finished", "stage": "generate", "agent_seconds": 110.3, "all_passed": true}
+{"time": "2026-11-14T21:15:22", "run": "20261114-200606", "event": "human_approval", "stage": "generate", "reviewer": "Shravanthika", "review_seconds": 49.7, "notes": ""}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "integration_run", "system": "patient_api", "records": 150, "rejected": 0, "status": "OK", "seconds": 0.003}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "integration_run", "system": "hospital_db", "records": 878, "rejected": 0, "status": "OK", "seconds": 0.027}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 102: rejected - patient_ref missing or invalid"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 556: rejected - result_value missing or invalid"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 1703: rejected - patient_ref missing or invalid"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 2223: rejected - result_value missing or invalid"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 3304: rejected - patient_ref missing or invalid"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 4445: rejected - result_value missing or invalid"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "integration_run", "system": "lab_csv", "records": 4988, "rejected": 6, "status": "OK", "seconds": 0.102}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "Encounter ENC-400878 refers to Patient/00000000-dead-beef-0000-000000000000, which is not in the registration system. Held for review."}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "Observation LAB-889 refers to Patient/00000000-dead-beef-0000-000000000001, which is not in the registration system. Held for review."}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "Observation LAB-4000 refers to Patient/00000000-dead-beef-0000-000000000001, which is not in the registration system. Held for review."}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "common_api_call", "path": "/Patient/e2c3b2db-4bf6-5b80-6491-231043613229/$everything"}
+{"time": "2026-11-14T21:15:33", "run": "20261114-200606", "event": "stage_finished", "stage": "operate", "records": 6016, "alerts": 9, "log_leaks": 0}
+{"time": "2026-11-14T21:37:54", "run": "20261114-200606", "event": "discovery_tools_run", "systems": ["patient_api", "hospital_db", "lab_csv"]}
+{"time": "2026-11-14T21:38:15", "run": "20261114-200606", "event": "agent_call", "task": "discover", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 21.3, "prompt_characters": 8196}
+{"time": "2026-11-14T21:38:15", "run": "20261114-200606", "event": "stage_finished", "stage": "discover", "agent_seconds": 21.3}
+{"time": "2026-11-14T21:42:21", "run": "20261114-200606", "event": "human_approval", "stage": "discover", "reviewer": "Shravanthika Rajkumar", "review_seconds": 246.3, "notes": "Checked: date formats correct (DD/MM/YYYY, YYYYMMDD HHMM, DD/MM/YYYY HH:mm); patient_id, PT_REF and patient_ref correctly linked; names, DOB, address and postcode marked personal. Correction: WEL and OUT do exist in LKP_VISIT_TYPE, as the agent only saw 5 sample rows."}
+{"time": "2026-11-14T21:43:33", "run": "20261114-200606", "event": "agent_call", "task": "design", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 60.1, "prompt_characters": 13834}
+{"time": "2026-11-14T21:43:33", "run": "20261114-200606", "event": "stage_finished", "stage": "design", "agent_seconds": 60.1, "mappings": 16}
+{"time": "2026-11-14T21:47:38", "run": "20261114-200606", "event": "agent_call", "task": "design", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 42.2, "prompt_characters": 14139}
+{"time": "2026-11-14T21:50:12", "run": "20261114-200606", "event": "agent_call", "task": "design", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 35.2, "prompt_characters": 14139}
+{"time": "2026-11-14T21:50:12", "run": "20261114-200606", "event": "stage_finished", "stage": "design", "agent_seconds": 35.2, "mappings": 20}
+{"time": "2026-11-14T21:52:00", "run": "20261114-200606", "event": "human_approval", "stage": "design", "reviewer": "Shravanthika", "review_seconds": 107.3, "notes": "Checked all mappings. First design missed Encounter.status and Observation.id/status, and took the department from VISIT_DESC instead of the lookup table. Sent feedback; the revised design is correct."}
+{"time": "2026-11-14T21:52:31", "run": "20261114-200606", "event": "agent_call", "task": "generate_patient_api_attempt1", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 19.8, "prompt_characters": 9142}
+{"time": "2026-11-14T21:52:31", "run": "20261114-200606", "event": "generation_attempt", "system": "patient_api", "attempt": 1, "checks_passed": 15, "checks_total": 15}
+{"time": "2026-11-14T21:53:15", "run": "20261114-200606", "event": "agent_call", "task": "generate_hospital_db_attempt1", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 43.7, "prompt_characters": 10512}
+{"time": "2026-11-14T21:53:15", "run": "20261114-200606", "event": "generation_attempt", "system": "hospital_db", "attempt": 1, "checks_passed": 15, "checks_total": 15}
+{"time": "2026-11-14T21:53:28", "run": "20261114-200606", "event": "agent_call", "task": "generate_lab_csv_attempt1", "mode": "live", "source": "live \u00b7 gemini-3.6-flash", "seconds": 13.2, "prompt_characters": 9850}
+{"time": "2026-11-14T21:53:30", "run": "20261114-200606", "event": "generation_attempt", "system": "lab_csv", "attempt": 1, "checks_passed": 15, "checks_total": 15}
+{"time": "2026-11-14T21:53:30", "run": "20261114-200606", "event": "stage_finished", "stage": "generate", "agent_seconds": 76.7, "all_passed": true}
+{"time": "2026-11-14T21:57:14", "run": "20261114-200606", "event": "human_approval", "stage": "generate", "reviewer": "Shravanthika", "review_seconds": 223.7, "notes": "All 3 adapters passed 15/15. Checked: lab and patient code read dates day-first; logs contain row numbers and field names only; hospital code uses the lookup table for visit type and sets status from VISIT_END, as corrected at Design. Minor: LOINC format not validated; first name optional."}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "integration_run", "system": "patient_api", "records": 150, "rejected": 0, "status": "OK", "seconds": 0.009}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "integration_run", "system": "hospital_db", "records": 878, "rejected": 0, "status": "OK", "seconds": 0.044}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 102: rejected - patient_ref missing or invalid"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 556: rejected - result_value missing or invalid"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 1703: rejected - patient_ref missing or invalid"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 2223: rejected - result_value missing or invalid"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 3304: rejected - patient_ref missing or invalid"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "lab_csv: row 4445: rejected - result_value missing or invalid"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "integration_run", "system": "lab_csv", "records": 4988, "rejected": 6, "status": "OK", "seconds": 0.177}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "Encounter ENC-400878 refers to Patient/00000000-dead-beef-0000-000000000000, which is not in the registration system. Held for review."}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "Observation LAB-889 refers to Patient/00000000-dead-beef-0000-000000000001, which is not in the registration system. Held for review."}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "alert", "level": "WARNING", "message": "Observation LAB-4000 refers to Patient/00000000-dead-beef-0000-000000000001, which is not in the registration system. Held for review."}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "common_api_call", "path": "/Patient/e2c3b2db-4bf6-5b80-6491-231043613229/$everything"}
+{"time": "2026-11-14T21:57:22", "run": "20261114-200606", "event": "stage_finished", "stage": "operate", "records": 6016, "alerts": 9, "log_leaks": 0}

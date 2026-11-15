@@ -1,0 +1,303 @@
+{
+  "patient_api": {
+    "attempts": 1,
+    "checks_passed": 15,
+    "checks_total": 15,
+    "all_passed": true,
+    "self_healed": false,
+    "agent_seconds": 19.8,
+    "code_file": "outputs/generated/patient_api.py",
+    "explanation": "The adapter retrieves patients from the REST API endpoint '/patients' and converts each record into a FHIR Patient resource. It maps patient identifiers, transforms names and sex codes ('F'/'M' to 'female'/'male'), and reformats birth dates from 'DD/MM/YYYY' to ISO 8601 'YYYY-MM-DD'. Any record missing required fields or failing format checks is safely rejected and reported through log() with field information only.",
+    "suggested_tests": [
+      "Test successful extraction with a valid patient record having DD/MM/YYYY birthDate and 'F' sex code.",
+      "Test rejection when patient_id contains invalid characters such as special punctuation.",
+      "Test rejection when date_of_birth is improperly formatted or an invalid calendar date.",
+      "Test rejection when sex is missing or not recognized in the code mapping table."
+    ],
+    "history": [
+      {
+        "attempt": 1,
+        "checks_passed": 15,
+        "checks_total": 15,
+        "failed": []
+      }
+    ],
+    "checks": [
+      {
+        "test": "safety check before running",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "runs without crashing",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "returns a list of records",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "returns at least one record",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "only produces the approved resource types",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "required fields are filled",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "dates are ISO 8601",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "patient links are valid references",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "coded values use allowed words",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "numeric values are numbers",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "record IDs are unique",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "handles broken records without crashing",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "rejects broken records instead of passing them on",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "reports each rejected record in the log",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "no personal data in log messages",
+        "passed": true,
+        "detail": ""
+      }
+    ]
+  },
+  "hospital_db": {
+    "attempts": 1,
+    "checks_passed": 15,
+    "checks_total": 15,
+    "all_passed": true,
+    "self_healed": false,
+    "agent_seconds": 43.7,
+    "code_file": "outputs/generated/hospital_db.py",
+    "explanation": "The extract_hospital_db function queries TBL_VISIT joined with LKP_VISIT_TYPE to pull encounter records and decode service type labels. It validates patient references, timestamps, and visit numbers, reformatting dates to ISO 8601 and setting status dynamically based on completion timestamps. Failed validation checks log sanitized messages specifying row numbers and rejected field names without revealing sensitive patient data.",
+    "suggested_tests": [
+      "Test valid completed visit row correctly produces Encounter resource with 'finished' status, ISO timestamps, and formatted serviceType.",
+      "Test in-progress visit with null VISIT_END produces Encounter with 'in-progress' status and no period.end field.",
+      "Test invalid patient reference containing special characters or invalid datetime string logs a rejected message with field name and skips output."
+    ],
+    "history": [
+      {
+        "attempt": 1,
+        "checks_passed": 15,
+        "checks_total": 15,
+        "failed": []
+      }
+    ],
+    "checks": [
+      {
+        "test": "safety check before running",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "runs without crashing",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "returns a list of records",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "returns at least one record",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "only produces the approved resource types",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "required fields are filled",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "dates are ISO 8601",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "patient links are valid references",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "coded values use allowed words",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "numeric values are numbers",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "record IDs are unique",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "handles broken records without crashing",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "rejects broken records instead of passing them on",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "reports each rejected record in the log",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "no personal data in log messages",
+        "passed": true,
+        "detail": ""
+      }
+    ]
+  },
+  "lab_csv": {
+    "attempts": 1,
+    "checks_passed": 15,
+    "checks_total": 15,
+    "all_passed": true,
+    "self_healed": false,
+    "agent_seconds": 13.2,
+    "code_file": "outputs/generated/lab_csv.py",
+    "explanation": "The extract_lab_csv adapter opens and parses laboratory CSV records using DictReader, validating fields such as patient reference UUIDs, timestamp strings, LOINC codes, and result values. Non-valid records trigger log calls containing only row numbers and parameter names before skipping to the next row. Valid records are transformed into standard FHIR Observation dictionaries with unique LAB row IDs.",
+    "suggested_tests": [
+      "Verify successful transformation of valid CSV lab result records into FHIR Observation resources.",
+      "Verify rejection and correct log message formatting when result_value is non-numeric or missing.",
+      "Verify rejection when collected_at timestamp does not follow the required DD/MM/YYYY HH:mm format."
+    ],
+    "history": [
+      {
+        "attempt": 1,
+        "checks_passed": 15,
+        "checks_total": 15,
+        "failed": []
+      }
+    ],
+    "checks": [
+      {
+        "test": "safety check before running",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "runs without crashing",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "returns a list of records",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "returns at least one record",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "only produces the approved resource types",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "required fields are filled",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "dates are ISO 8601",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "patient links are valid references",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "coded values use allowed words",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "numeric values are numbers",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "record IDs are unique",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "handles broken records without crashing",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "rejects broken records instead of passing them on",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "reports each rejected record in the log",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "test": "no personal data in log messages",
+        "passed": true,
+        "detail": ""
+      }
+    ]
+  }
+}

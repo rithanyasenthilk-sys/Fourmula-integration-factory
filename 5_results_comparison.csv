@@ -1,0 +1,7 @@
+measure,manual,AI-assisted
+Time to build all 3 integrations (minutes),Person 3 to fill in,11.8 (agent 2.2 + human review 9.6)
+Correctness: key fields mapped correctly,Person 3 to fill in,16/16
+Consistency: template and rule checks passed (all adapters),save manual adapters in /manual,15/15
+"Reliability: automated checks passed, incl. broken-data handling",save manual adapters in /manual,42/42
+Agent attempts / self-healing fixes,n/a,3 attempts across 3 adapters · 0 fixed itself
+Personal data found in logs,n/a,0

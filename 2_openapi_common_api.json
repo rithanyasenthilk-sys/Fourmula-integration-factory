@@ -1,0 +1,333 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Unified patient data API (FHIR-aligned)",
+    "version": "0.1.0",
+    "description": "Generated from the agent's approved design. Synthetic data only."
+  },
+  "paths": {
+    "/Patient/{id}/$everything": {
+      "get": {
+        "summary": "Everything known about one patient, combined from all connected systems",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FHIR searchset Bundle",
+            "content": {
+              "application/fhir+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bundle"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown patient"
+          }
+        }
+      }
+    },
+    "/Encounter/{id}": {
+      "get": {
+        "summary": "Read one Encounter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Encounter",
+            "content": {
+              "application/fhir+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Encounter"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/Observation/{id}": {
+      "get": {
+        "summary": "Read one Observation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Observation",
+            "content": {
+              "application/fhir+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Observation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/Patient/{id}": {
+      "get": {
+        "summary": "Read one Patient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient",
+            "content": {
+              "application/fhir+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Encounter": {
+        "type": "object",
+        "required": [
+          "resourceType",
+          "id",
+          "period",
+          "status",
+          "subject"
+        ],
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "Encounter"
+            ]
+          },
+          "id": {
+            "description": "'ENC-' + source admission number"
+          },
+          "period": {
+            "description": "YYYY-MM-DDTHH:MM:SS; YYYY-MM-DDTHH:MM:SS (optional)"
+          },
+          "serviceType": {
+            "description": "ward or department"
+          },
+          "status": {
+            "description": "planned | in-progress | finished | cancelled"
+          },
+          "subject": {
+            "description": "'Patient/' + patient ID"
+          }
+        },
+        "example": {
+          "resourceType": "Encounter",
+          "id": "ENC-1",
+          "status": "finished",
+          "period": {
+            "start": "2026-01-02T08:00:00",
+            "end": "2026-01-05T12:00:00"
+          },
+          "serviceType": {
+            "text": "Ward 3"
+          },
+          "subject": {
+            "reference": "Patient/P123"
+          }
+        }
+      },
+      "Observation": {
+        "type": "object",
+        "required": [
+          "resourceType",
+          "code",
+          "effectiveDateTime",
+          "id",
+          "status",
+          "subject",
+          "valueQuantity"
+        ],
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "Observation"
+            ]
+          },
+          "code": {
+            "description": "http://loinc.org; LOINC code; test name in words"
+          },
+          "effectiveDateTime": {
+            "description": "YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS"
+          },
+          "id": {
+            "description": "'LAB-' + source row or result number"
+          },
+          "referenceRange": {
+            "description": "normal range as text"
+          },
+          "status": {
+            "description": "final | preliminary | amended"
+          },
+          "subject": {
+            "description": "'Patient/' + patient ID"
+          },
+          "valueQuantity": {
+            "description": "number; unit text"
+          }
+        },
+        "example": {
+          "resourceType": "Observation",
+          "id": "LAB-0001",
+          "status": "final",
+          "code": {
+            "coding": [
+              {
+                "system": "http://loinc.org",
+                "code": "718-7",
+                "display": "Haemoglobin"
+              }
+            ],
+            "text": "Haemoglobin"
+          },
+          "subject": {
+            "reference": "Patient/P123"
+          },
+          "effectiveDateTime": "2026-01-31",
+          "valueQuantity": {
+            "value": 13.2,
+            "unit": "g/dL"
+          },
+          "referenceRange": [
+            {
+              "text": "12.0-15.5"
+            }
+          ]
+        }
+      },
+      "Patient": {
+        "type": "object",
+        "required": [
+          "resourceType",
+          "birthDate",
+          "gender",
+          "id",
+          "name"
+        ],
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "Patient"
+            ]
+          },
+          "birthDate": {
+            "description": "YYYY-MM-DD"
+          },
+          "gender": {
+            "description": "male | female | other | unknown"
+          },
+          "id": {
+            "description": "the patient's ID from the registration system"
+          },
+          "name": {
+            "description": "surname; list of first names"
+          }
+        },
+        "example": {
+          "resourceType": "Patient",
+          "id": "P123",
+          "name": [
+            {
+              "family": "Doe",
+              "given": [
+                "Jane"
+              ]
+            }
+          ],
+          "gender": "female",
+          "birthDate": "1970-01-31"
+        }
+      },
+      "Bundle": {
+        "type": "object",
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "Bundle"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "resource": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Encounter"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Observation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Patient"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

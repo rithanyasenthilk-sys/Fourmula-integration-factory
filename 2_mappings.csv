@@ -1,0 +1,21 @@
+system_id,source,target,transform
+patient_api,GET /patients.patient_id,Patient.id,Direct string assignment.
+patient_api,GET /patients.first_name,Patient.name[0].given,String to array wrapping: 'Jane' -> ['Jane'].
+patient_api,GET /patients.last_name,Patient.name[0].family,Direct string assignment.
+patient_api,GET /patients.date_of_birth,Patient.birthDate,Date reformatting: 'DD/MM/YYYY' -> ISO 8601 'YYYY-MM-DD' (e.g. '31/01/1970' -> '1970-01-31').
+patient_api,GET /patients.sex,Patient.gender,"Code mapping table in full: F->female, M->male."
+hospital_db,TBL_VISIT.VISIT_NO,Encounter.id,Prepend string prefix: numeric integer -> 'ENC-' + VISIT_NO (e.g. 400001 -> 'ENC-400001').
+hospital_db,TBL_VISIT.PT_REF,Encounter.subject.reference,Prepend reference prefix: UUID -> 'Patient/' + PT_REF.
+hospital_db,TBL_VISIT.VISIT_START,Encounter.period.start,Timestamp reformatting: 'YYYYMMDD HHMM' -> ISO 8601 'YYYY-MM-DDTHH:MM:SS' (e.g. '20260102 0800' -> '2026-01-02T08:00:00').
+hospital_db,TBL_VISIT.VISIT_END,Encounter.period.end,Timestamp reformatting if present: 'YYYYMMDD HHMM' -> ISO 8601 'YYYY-MM-DDTHH:MM:SS'.
+hospital_db,TBL_VISIT.VISIT_END,Encounter.status,"Conditional assignment: set 'finished' when VISIT_END is present/non-null, otherwise set 'in-progress'."
+hospital_db,LKP_VISIT_TYPE.TYPE_DESC,Encounter.serviceType.text,Direct string assignment from LKP_VISIT_TYPE.TYPE_DESC joined via TBL_VISIT.VISIT_TYPE = LKP_VISIT_TYPE.TYPE_CD.
+lab_csv,lab_csv.row_number,Observation.id,Prepend string prefix: row number -> 'LAB-' + row number (e.g. row 1 -> 'LAB-1').
+lab_csv,lab_csv.patient_ref,Observation.subject.reference,Prepend reference prefix: UUID -> 'Patient/' + patient_ref.
+lab_csv,lab_csv.collected_at,Observation.effectiveDateTime,Timestamp reformatting: 'DD/MM/YYYY HH:mm' -> ISO 8601 'YYYY-MM-DDTHH:MM:SS' (e.g. '31/01/2026 09:30' -> '2026-01-31T09:30:00').
+lab_csv,lab_csv.loinc_code,Observation.code.coding[0].code,Direct string assignment.
+lab_csv,lab_csv.loinc_code,Observation.code.coding[0].system,Assign constant URI string: 'http://loinc.org'.
+lab_csv,lab_csv.test_description,Observation.code.text,Direct string assignment.
+lab_csv,lab_csv.result_value,Observation.valueQuantity.value,Parse decimal string to float number (e.g. '10.5' -> 10.5).
+lab_csv,lab_csv.result_unit,Observation.valueQuantity.unit,Direct string assignment.
+lab_csv,lab_csv.status,Observation.status,Assign constant value 'final'.

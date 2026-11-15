@@ -1,0 +1,210 @@
+{
+  "connections": [
+    {
+      "system_id": "patient_api",
+      "pattern": "REST API pull",
+      "how": "Execute HTTP GET requests against the /patients REST API endpoint.",
+      "reason": " patient_api exposes HTTP REST endpoints returning JSON patient demographic records."
+    },
+    {
+      "system_id": "hospital_db",
+      "pattern": "SQL batch query",
+      "how": "Execute SQL queries joining TBL_VISIT with LKP_VISIT_TYPE on TBL_VISIT.VISIT_TYPE = LKP_VISIT_TYPE.TYPE_CD.",
+      "reason": "hospital_db is a relational SQL database containing relational encounter and lookup tables."
+    },
+    {
+      "system_id": "lab_csv",
+      "pattern": "file ingest",
+      "how": "Parse nightly CSV file exports containing laboratory result rows.",
+      "reason": "lab_csv delivers laboratory result data via scheduled nightly CSV batch files."
+    }
+  ],
+  "mappings": [
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.patient_id",
+      "target": "Patient.id",
+      "transform": "Direct string assignment."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.first_name",
+      "target": "Patient.name[0].given",
+      "transform": "String to array wrapping: 'Jane' -> ['Jane']."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.last_name",
+      "target": "Patient.name[0].family",
+      "transform": "Direct string assignment."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.date_of_birth",
+      "target": "Patient.birthDate",
+      "transform": "Date reformatting: 'DD/MM/YYYY' -> ISO 8601 'YYYY-MM-DD' (e.g. '31/01/1970' -> '1970-01-31')."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.sex",
+      "target": "Patient.gender",
+      "transform": "Code mapping table in full: F->female, M->male."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.VISIT_NO",
+      "target": "Encounter.id",
+      "transform": "Prepend string prefix: numeric integer -> 'ENC-' + VISIT_NO (e.g. 400001 -> 'ENC-400001')."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.PT_REF",
+      "target": "Encounter.subject.reference",
+      "transform": "Prepend reference prefix: UUID -> 'Patient/' + PT_REF."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.VISIT_START",
+      "target": "Encounter.period.start",
+      "transform": "Timestamp reformatting: 'YYYYMMDD HHMM' -> ISO 8601 'YYYY-MM-DDTHH:MM:SS' (e.g. '20260102 0800' -> '2026-01-02T08:00:00')."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.VISIT_END",
+      "target": "Encounter.period.end",
+      "transform": "Timestamp reformatting if present: 'YYYYMMDD HHMM' -> ISO 8601 'YYYY-MM-DDTHH:MM:SS'."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.VISIT_END",
+      "target": "Encounter.status",
+      "transform": "Conditional assignment: set 'finished' when VISIT_END is present/non-null, otherwise set 'in-progress'."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "LKP_VISIT_TYPE.TYPE_DESC",
+      "target": "Encounter.serviceType.text",
+      "transform": "Direct string assignment from LKP_VISIT_TYPE.TYPE_DESC joined via TBL_VISIT.VISIT_TYPE = LKP_VISIT_TYPE.TYPE_CD."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.row_number",
+      "target": "Observation.id",
+      "transform": "Prepend string prefix: row number -> 'LAB-' + row number (e.g. row 1 -> 'LAB-1')."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.patient_ref",
+      "target": "Observation.subject.reference",
+      "transform": "Prepend reference prefix: UUID -> 'Patient/' + patient_ref."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.collected_at",
+      "target": "Observation.effectiveDateTime",
+      "transform": "Timestamp reformatting: 'DD/MM/YYYY HH:mm' -> ISO 8601 'YYYY-MM-DDTHH:MM:SS' (e.g. '31/01/2026 09:30' -> '2026-01-31T09:30:00')."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.loinc_code",
+      "target": "Observation.code.coding[0].code",
+      "transform": "Direct string assignment."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.loinc_code",
+      "target": "Observation.code.coding[0].system",
+      "transform": "Assign constant URI string: 'http://loinc.org'."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.test_description",
+      "target": "Observation.code.text",
+      "transform": "Direct string assignment."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.result_value",
+      "target": "Observation.valueQuantity.value",
+      "transform": "Parse decimal string to float number (e.g. '10.5' -> 10.5)."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.result_unit",
+      "target": "Observation.valueQuantity.unit",
+      "transform": "Direct string assignment."
+    },
+    {
+      "system_id": "lab_csv",
+      "source": "lab_csv.status",
+      "target": "Observation.status",
+      "transform": "Assign constant value 'final'."
+    }
+  ],
+  "not_mapped": [
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.marital_status",
+      "reason": "Personal data with no corresponding target field in Patient schema."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.address",
+      "reason": "Personal address data with no target field in Patient schema."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.city",
+      "reason": "Personal address data with no target field in Patient schema."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.county",
+      "reason": "Personal address data with no target field in Patient schema."
+    },
+    {
+      "system_id": "patient_api",
+      "source": "GET /patients.postcode",
+      "reason": "Personal address data with no target field in Patient schema."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.VISIT_TYPE",
+      "reason": "Used as foreign key to join with LKP_VISIT_TYPE.TYPE_CD; not mapped directly to a target field."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.SCT_CD",
+      "reason": "SNOMED CT clinical code with no matching field in target Encounter schema."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.VISIT_DESC",
+      "reason": "Superseded by LKP_VISIT_TYPE.TYPE_DESC for service type mapping per reviewer instructions."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "TBL_VISIT.RSN_DESC",
+      "reason": "Reason description text has no target field in Encounter schema."
+    },
+    {
+      "system_id": "hospital_db",
+      "source": "LKP_VISIT_TYPE.TYPE_CD",
+      "reason": "Lookup primary key used solely for table join logic."
+    }
+  ],
+  "validation_rules": [
+    "Patient resources must include non-null fields for id, name[0].family, gender, and birthDate.",
+    "Patient.gender must be one of the exact allowed values: 'male', 'female', 'other', 'unknown'.",
+    "Patient.birthDate must follow ISO 8601 format YYYY-MM-DD.",
+    "Encounter resources must include non-null fields for id, status, period.start, and subject.reference.",
+    "Encounter.status must be one of the exact allowed values: 'planned', 'in-progress', 'finished', 'cancelled'.",
+    "Encounter.period.start and period.end (if present) must follow ISO 8601 format YYYY-MM-DDTHH:MM:SS.",
+    "Observation resources must include non-null fields for id, status, code.coding[0].code, subject.reference, effectiveDateTime, valueQuantity.value, and valueQuantity.unit.",
+    "Observation.status must be set to 'final' (or one of 'final', 'preliminary', 'amended').",
+    "Observation.valueQuantity.value must be a valid numeric float parsed from result_value string.",
+    "Observation.effectiveDateTime must follow ISO 8601 format YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS.",
+    "All target records must contain 'resourceType' and a valid 'id' prefixed from the source system identifier.",
+    "Any record failing field presence, enumeration, date format, or numeric validation must be rejected and logged completely without partial mapping or guessing."
+  ]
+}
